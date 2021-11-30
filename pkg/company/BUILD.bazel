@@ -1,0 +1,9 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "company",
+    srcs = ["insert.go"],
+    importpath = "github.com/b-entangled/bazel-integration/pkg/company",
+    visibility = ["//visibility:public"],
+    deps = ["//pkg/design"],
+)

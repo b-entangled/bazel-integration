@@ -1,0 +1,40 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_docker//go:image.bzl", "go_image")
+
+load("@io_bazel_rules_docker//container:container.bzl", "container_image")
+
+go_library(
+    name = "server_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/b-entangled/bazel-integration/cmd/server",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//pkg/company",
+        "//pkg/design",
+        "@org_golang_google_grpc//:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "server",
+    embed = [":server_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_image(
+    name = "go_image",
+    srcs = ["main.go"],
+    importpath = "github.com/b-entangled/bazel-integration/cmd/bazel-integration",
+    deps = [
+        "//pkg/company",
+        "//pkg/design",
+        "@org_golang_google_grpc//:go_default_library",
+    ],
+)
+
+container_image(
+    name = "bazel-integration",
+    base = "@alpine_linux_amd64//image",
+    entrypoint = ["/server"],
+    files = [":server"],
+)
