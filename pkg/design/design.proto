@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+message Company {
+  string company_name = 1;
+  string company_id = 2;
+  string company_url = 3;
+}
+
+message InsertCompanyRequest {
+    Company company = 1;
+}
+
+message GetCompanyRequest {
+  string company_id = 2;
+}
+
+message GetCompanyResponse {
+    Company company = 1;
+}
+
+service CompanyService {
+  rpc GetCompany(GetCompanyRequest) returns (GetCompanyResponse);
+}
